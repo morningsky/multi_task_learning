@@ -48,9 +48,9 @@ Dataset: https://archive.ics.uci.edu/ml/machine-learning-databases/census-income
 
 ## CGC
 
-![Shared-Bottom](./png/cgc.png)
+![Shared-Bottom](./png/CGC.png)
 
 ## PLE
 
-![Shared-Bottom](./png/ple.png)
+![Shared-Bottom](./png/PLE.png)
 
