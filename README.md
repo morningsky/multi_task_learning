@@ -12,9 +12,9 @@ You can easy to use the code to design your multi task learning model  for multi
 from ple import PLE 
 
 model = PLE(dnn_feature_columns, num_tasks=2, task_types=['binary', 'regression'], 
-            task_names=['task 1','task 2'], num_levels=2, num_experts_specific=8, 
-						num_experts_shared=4, expert_dnn_units=[64,64], gate_dnn_units=[16,16], 
-          	tower_dnn_units_lists=[[32,32],[32,32]])
+            task_names=['task 1','task 2'], num_levels=2, num_experts_specific=8,
+            num_experts_shared=4, expert_dnn_units=[64,64], gate_dnn_units=[16,16],
+            tower_dnn_units_lists=[[32,32],[32,32]])
 
 model.compile("adam", loss=["binary_crossentropy", "mean_squared_error"], metrics=['AUC','mae'])
 
