@@ -5,8 +5,8 @@ from deepctr.layers.core import PredictionLayer, DNN
 from deepctr.layers.utils import combined_dnn_input 
 
 def PLE_CGC(dnn_feature_columns, num_tasks, task_types, task_names, num_experts_specific=8, num_experts_shared=4,
-          expert_dnn_units=[64,64],  gate_dnn_units=[16,16], tower_dnn_units_lists=[[16,16],[16,16]],
-          l2_reg_embedding=1e-5, l2_reg_dnn=0, seed=1024, dnn_dropout=0, dnn_activation='relu', dnn_use_bn=False):
+            expert_dnn_units=[64,64],  gate_dnn_units=None, tower_dnn_units_lists=[[16,16],[16,16]],
+            l2_reg_embedding=1e-5, l2_reg_dnn=0, seed=1024, dnn_dropout=0, dnn_activation='relu', dnn_use_bn=False):
     """Instantiates the Customized Gate Control block of Progressive Layered Extraction architecture.
     
     :param dnn_feature_columns: An iterable containing all the features used by deep part of the model.
@@ -18,7 +18,7 @@ def PLE_CGC(dnn_feature_columns, num_tasks, task_types, task_names, num_experts_
     :param num_experts_shared: integer, number of task-shared experts.
 
     :param expert_dnn_units: list, list of positive integer, its length must be greater than 1, the layer number and units in each layer of expert DNN
-    :param gate_dnn_units: list, list of positive integer, its length must be greater than 1, the layer number and units in each layer of gate DNN
+    :param gate_dnn_units: list, list of positive integer or None, the layer number and units in each layer of gate DNN, default value is None. e.g.[8, 8].
     :param tower_dnn_units_lists: list, list of positive integer list, its length must be euqal to num_tasks, the layer number and units in each layer of task-specific DNN
     
     :param l2_reg_embedding: float. L2 regularizer strength applied to embedding vector
@@ -62,8 +62,7 @@ def PLE_CGC(dnn_feature_columns, num_tasks, task_types, task_names, num_experts_
         expert_network = DNN(expert_dnn_units, dnn_activation, l2_reg_dnn, dnn_dropout, dnn_use_bn, seed=seed, name='expert_shared_'+str(i))(dnn_input)
         expert_outputs.append(expert_network)
         
-
-
+    #build one Extraction Layer
     cgc_outs = []
     for i in range(num_tasks): 
         #concat task-specific expert and task-shared expert
@@ -73,8 +72,13 @@ def PLE_CGC(dnn_feature_columns, num_tasks, task_types, task_names, num_experts_
         expert_concat = tf.keras.layers.Reshape([cur_expert_num, expert_dnn_units[-1]], name='expert_reshape_'+task_names[i])(expert_concat)
         
         #build gate layers
-        gate_network = DNN(gate_dnn_units, dnn_activation, l2_reg_dnn, dnn_dropout, dnn_use_bn, seed=seed, name='gate_'+task_names[i])(dnn_input)
-        gate_out = tf.keras.layers.Dense(cur_expert_num, use_bias=False, activation='softmax', name='gate_softmax_'+task_names[i])(gate_network)
+        if gate_dnn_units!=None:
+            gate_network = DNN(gate_dnn_units, dnn_activation, l2_reg_dnn, dnn_dropout, dnn_use_bn, seed=seed, name='gate_'+task_names[i])(dnn_input)
+            gate_input = gate_network
+        else:  #in origin paper, gate is one Dense layer with softmax.
+            gate_input = dnn_input
+            
+        gate_out = tf.keras.layers.Dense(cur_expert_num, use_bias=False, activation='softmax', name='gate_softmax_'+task_names[i])(gate_input)
         gate_out = tf.tile(tf.expand_dims(gate_out, axis=-1), [1, 1, expert_dnn_units[-1]]) 
         
         #gate multiply the expert

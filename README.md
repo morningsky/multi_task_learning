@@ -8,10 +8,11 @@ You can easy to use the code to design your multi task learning model  for multi
 
 ## Quick Start
 
+~~~python
 ```python
 from ple import PLE 
 
-model = PLE(dnn_feature_columns, num_tasks=2, task_types=['binary', 'regression'], 
+model = PLE(dnn_feature_columns, num_tasks=2, task_types=['binary', 'regression'],
             task_names=['task 1','task 2'], num_levels=2, num_experts_specific=8,
             num_experts_shared=4, expert_dnn_units=[64,64], gate_dnn_units=[16,16],
             tower_dnn_units_lists=[[32,32],[32,32]])
@@ -24,10 +25,11 @@ pred_ans = model.predict(X_test, batch_size=256)
 
 
 ```
+~~~
 
 
 
-### [Example 1](./example/demo.ipynb)
+### [Example 1](example1.ipynb)
 
 Dataset: http://archive.ics.uci.edu/ml/machine-learning-databases/adult/
 
@@ -35,11 +37,52 @@ Task 1: (Classification) aims to predict whether the income exceeds 50K.
 
 Task 2: (Classification) aims to predict this person’s marital status is never married.
 
-### Example 2
+### [Example 2](example2.ipynb)
 
 Dataset: https://archive.ics.uci.edu/ml/machine-learning-databases/census-income-mld/
 
-*Preparing*
+Census-income Dataset contains 299,285 samples and 40 features extracted from the 1994 census database.  In detail, task 1 aims to predict whether the income exceeds 50K, task 2 aims to predict whether this person’s marital status is never married. 
+
+**Experiment Setup** (follow MMOE paper) :
+
+```python
+#Parameters
+learning_rate = 0.01 #Adam
+batch_size = 1024
+
+#ESMM
+Tower Network: hidden_size=8
+  
+#Shared-Bottom
+Bottom Network: hidden_size = 16
+Tower Network: hidden_size=8
+
+#MMOE
+num_experts = 8
+Expert Network: hidden_size=16
+Tower Network: hidden_size=8
+
+#CGC
+num_experts_specific=4
+num_experts_shared=4
+Expert Network: hidden_size=16
+Tower Network: hidden_size=8
+
+#PLE
+num_level = 2
+```
+
+**Experiment Results**
+
+|               Model               | AUC/Income | AUC/Marital Stat |
+| :-------------------------------: | :--------: | :--------------: |
+| [Shared-Bottom](shared_bottom.py) |   0.9478   |      0.9947      |
+|          [ESMM](essm.py)          |   0.9439   |      0.9904      |
+|          [MMoE](mmoe.py)          |   0.9463   |      0.9937      |
+|         [CGC](ple_cgc.py)         |   0.9471   |      0.9947      |
+|           [PLE](ple.py)           | **0.948**  |    **0.9947**    |
+
+Notes: We  have not adopt a hyper-parameter tuner as MMoE paper done. In ESSM experiment, we take task 1 as CTR, take task 2 as CTCVR.
 
 |               Model               |          Description           |                            Paper                             |
 | :-------------------------------: | :----------------------------: | :----------------------------------------------------------: |

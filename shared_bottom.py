@@ -6,8 +6,7 @@ from deepctr.layers.utils import combined_dnn_input
 
 def Shared_Bottom(dnn_feature_columns, num_tasks, task_types, task_names,
                   bottom_dnn_units=[128, 128], tower_dnn_units_lists=[[64,32], [64,32]],
-                  l2_reg_embedding=0.00001, l2_reg_dnn=0, seed=1024, dnn_dropout=0,
-                 dnn_activation='relu', dnn_use_bn=False):
+                  l2_reg_embedding=0.00001, l2_reg_dnn=0, seed=1024, dnn_dropout=0,dnn_activation='relu', dnn_use_bn=False):
     """Instantiates the Shared_Bottom multi-task learning Network architecture.
     
     :param dnn_feature_columns: An iterable containing all the features used by deep part of the model.
