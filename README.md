@@ -50,7 +50,19 @@ Task 2: (Classification) aims to predict this person’s marital status is never
 
 Dataset: https://archive.ics.uci.edu/ml/machine-learning-databases/census-income-mld/
 
-Census-income Dataset contains 299,285 samples and 40 features extracted from the 1994 census database.  In detail, task 1 aims to predict whether the income exceeds 50K, task 2 aims to predict whether this person’s marital status is never married. 
+Census-income Dataset contains 299,285 samples and 40 features extracted from the 1994 census database.
+
+**Group 1**
+
+Task 1: (Classification) aims to predict whether the income exceeds 50K.
+
+Task 2: (Classification) aims to predict this person’s marital status is never married.
+
+**Group 2**
+
+Task 1: (Classification) aims to predict whether the education level is at least college.
+
+Task 2: (Classification) aims to predict this person’s marital status is never married.
 
 **Experiment Setup** (follow MMOE paper) :
 
@@ -81,17 +93,17 @@ Tower Network: hidden_size=8
 num_level = 2
 ```
 
-**Experiment Results**
+**Experiment Results (AUC)** 
 
-|               Model               | AUC/Income | AUC/Marital Stat |
-| :-------------------------------: | :--------: | :--------------: |
-| [Shared-Bottom](shared_bottom.py) |   0.9478   |      0.9947      |
-|          [ESMM](essm.py)          |   0.9439   |      0.9904      |
-|          [MMoE](mmoe.py)          |   0.9463   |      0.9937      |
-|         [CGC](ple_cgc.py)         |   0.9471   |      0.9947      |
-|           [PLE](ple.py)           | **0.948**  |    **0.9947**    |
+|               Model               | Group1<br />Income | Group1<br />Marital Stat | Group2<br />Education | Group2 <br />Marital Stat |
+| :-------------------------------: | :----------------: | :----------------------: | --------------------- | ------------------------- |
+| [Shared-Bottom](shared_bottom.py) |       0.9478       |          0.9947          | **0.8745**            | 0.9945                    |
+|          [ESMM](essm.py)          |       0.9439       |          0.9904          | 0.8601                | 0.982                     |
+|          [MMoE](mmoe.py)          |       0.9463       |          0.9937          | 0.8734                | 0.9946                    |
+|         [CGC](ple_cgc.py)         |       0.9471       |          0.9947          | 0.8736                | **0.9946**                |
+|           [PLE](ple.py)           |     **0.948**      |        **0.9947**        | 0.8737                | 0.9945                    |
 
-Notes: We  have not adopt a hyper-parameter tuner as MMoE paper done. In ESSM experiment, we take task 1 as CTR, take task 2 as CTCVR.
+Notes: We  do not implement a hyper-parameter tuner as MMoE paper done. In ESSM experiment, we treat task 2 as CTR and task 1 as CTCVR.
 
 
 
