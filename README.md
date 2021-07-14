@@ -46,19 +46,21 @@ Task 1: (Classification) aims to predict whether the income exceeds 50K.
 
 Task 2: (Classification) aims to predict this person’s marital status is never married.
 
-### [Example 2](example2.ipynb)
+
 
 Dataset: https://archive.ics.uci.edu/ml/machine-learning-databases/census-income-mld/
 
 Census-income Dataset contains 299,285 samples and 40 features extracted from the 1994 census database.
 
-**Group 1**
+### [Example 2](example2.ipynb)
+
+**[Group 1](example2.ipynb)**
 
 Task 1: (Classification) aims to predict whether the income exceeds 50K.
 
 Task 2: (Classification) aims to predict this person’s marital status is never married.
 
-**Group 2**
+**[Group 2](example3.ipynb)**
 
 Task 1: (Classification) aims to predict whether the education level is at least college.
 
