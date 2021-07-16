@@ -50,9 +50,9 @@ Task 2: (Classification) aims to predict this person’s marital status is never
 
 Dataset: https://archive.ics.uci.edu/ml/machine-learning-databases/census-income-mld/
 
-Census-income Dataset contains 299,285 samples and 40 features extracted from the 1994 census database.
-
 ### [Example 2](example2.ipynb)
+
+Census-income Dataset contains 299,285 samples and 40 features extracted from the 1994 census database.
 
 **[Group 1](example2.ipynb)**
 
